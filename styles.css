@@ -31,6 +31,7 @@ body {
   color: var(--ink);
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* guard against full-bleed / long-word overflow on small screens */
 }
 
 a { color: var(--blue); text-decoration: none; }
@@ -92,7 +93,9 @@ h1, h2, h3, p { margin: 0; }
   height: 50px;
   display: block;
   object-fit: contain;
-  margin-left: 0;
+  /* nudge left to offset the logo PNG's transparent padding so the
+     visible mark lines up with the hero text's left edge */
+  margin-left: -6px;
 }
 
 .main-nav {
@@ -231,6 +234,7 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: -.035em;
   font-weight: 700;
   text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .hero-lede {
@@ -306,9 +310,9 @@ h1, h2, h3, p { margin: 0; }
 /* Stats band */
 
 .stats-band {
-  /* border-top: 1px solid var(--line-12);
-  border-bottom: 1px solid var(--line-12); */
-  background: #1E1C1C;
+  border-top: 1px solid var(--line-12);
+  border-bottom: 1px solid var(--line-12);
+  background: var(--dark-bg);
 }
 
 .stats-band .wrap {
@@ -354,8 +358,9 @@ h1, h2, h3, p { margin: 0; }
 
 @media (max-width: 900px) {
   .stats-band .wrap { flex-direction: column; align-items: center; gap: 20px; }
-  .hours-right { width: 100%; gap: 18px; flex-wrap: wrap; }
+  .hours-right { width: 100%; gap: 18px 28px; flex-wrap: wrap; }
   .hours-item { text-align: center; }
+  .stats-divider { display: none; }
 }
 
 /* When the hours panel is placed inside the stats band, make it span the full wrap and center */
@@ -488,8 +493,8 @@ h1, h2, h3, p { margin: 0; }
   padding: 24px;
 }
 
-.review-card .stars { font-size: 13.5px; color: var(--blue); letter-spacing: .12em; }
-.review-card .quote { font-size: 16.5px; line-height: 1.55; margin-top: 12px; color: #334055; text-wrap: pretty; }
+.review-card .stars { font-size: 13.5px; color: var(--dark-quote); letter-spacing: .12em; }
+.review-card .quote { font-size: 16.5px; line-height: 1.55; margin-top: 12px; color: var(--ink-muted); text-wrap: pretty; }
 .review-card .who { font-size: 12px; color: var(--ink-muted-3); margin-top: 14px; }
 
 /* Drop-by split section */
@@ -535,7 +540,7 @@ h1, h2, h3, p { margin: 0; }
 
 .appointment-section {
   /* border-top: 1px solid var(--line-12); */
-  background: var(--panel);
+  background: var(--dark-bg);
 }
 
 .appointment-section .wrap {
@@ -567,7 +572,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .form-card {
-  background: #fff;
+  background: var(--ink);
   border: 1px solid var(--line-10);
   border-radius: 14px;
   padding: 28px;
@@ -687,7 +692,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .facts-strip .fact {
-  background: #fff;
+  background: var(--panel);
   padding: 26px 24px;
 }
 
@@ -695,6 +700,7 @@ h1, h2, h3, p { margin: 0; }
   font-size: 32px;
   font-weight: 700;
   letter-spacing: -.03em;
+  color: var(--ink);
 }
 
 .facts-strip .fact-label {
@@ -859,19 +865,25 @@ h1, h2, h3, p { margin: 0; }
 .site-footer .wrap {
   padding: 36px 32px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 24px;
-  flex-wrap: wrap;
 }
 
-.footer-shop { font-size: 15px; color: var(--ink-muted-2); }
+.footer-shop { font-size: 15px; color: var(--ink-muted-2); line-height: 1.7; }
+.footer-shop a { color: inherit; }
+.footer-shop a:hover { color: var(--blue); }
 .footer-copy { font-size: 12.5px; color: var(--ink-muted-3); }
 
 /* Responsive */
 
+@media (max-width: 1100px) {
+  .hero h1 { font-size: 52px; }
+}
+
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 46px; }
   .hero-photo { order: -1; aspect-ratio: 16 / 9; }
   .appointment-section .wrap { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -890,13 +902,35 @@ h1, h2, h3, p { margin: 0; }
 }
 
 @media (max-width: 640px) {
-  .hero h1 { font-size: 42px; }
-  .page-hero h1 { font-size: 38px; }
-  .section-head h2, .split-section h2, .appointment-section h2 { font-size: 28px; }
-  .reviews-band .wrap, .reviews-grid-light { grid-template-columns: 1fr; }
+  .hero { padding: 48px 0 48px; gap: 32px; }
+  .hero h1 { font-size: 38px; letter-spacing: -.02em; }
+  .page-hero h1 { font-size: 34px; }
+  .section-head h2, .split-section h2, .appointment-section h2, .about-section h2 { font-size: 26px; }
+  .about-sub { font-size: 17px; }
+  .reviews-band { padding: 64px 0; }
+  .reviews-band .wrap, .reviews-grid-light { grid-template-columns: 1fr; gap: 28px; }
   .services-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .form-field.span-2 { grid-column: span 1; }
-  .site-header .wrap { flex-wrap: wrap; gap: 12px; padding-bottom: 12px; }
-  .main-nav { flex-wrap: wrap; }
+  .hours-right { flex-direction: column; gap: 14px; }
+  .site-header .wrap { flex-wrap: wrap; gap: 12px 16px; padding-bottom: 12px; }
+  .main-nav { flex-wrap: wrap; row-gap: 4px; }
+  .hero-actions { width: 100%; }
+  .hero-actions .btn { flex: 1 1 100%; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .wrap { padding-left: 20px; padding-right: 20px; }
+  .facts-strip { grid-template-columns: 1fr; }
+  .facts-strip .fact { padding: 20px; }
+  .reviews-band .wrap { padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 32px; }
+  .hero-eyebrow { font-size: 13px; letter-spacing: .1em; margin-bottom: 14px; }
+  .appointment-section .wrap { padding: 44px 20px; }
+  .appointment-section .intro-text { font-size: 16px; }
+  .stats-band .wrap { padding: 26px 20px; }
+  .site-footer .wrap { padding: 32px 20px; }
+  .main-nav { gap: 4px; }
+  .main-nav a.nav-link { padding: 8px 10px; }
+  .nav-call { margin-left: 0; }
 }
